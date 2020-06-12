@@ -1,0 +1,11 @@
+{
+  "name": "ticker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/yunti/Ticker.git",
+  "author": "yunti <yunti9@icloud.com>",
+  "license": "MIT",
+  "dependencies": {
+    "prettier": "^2.0.5"
+  }
+}
