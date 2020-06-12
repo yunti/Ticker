@@ -1,24 +1,6 @@
 'use strict'
 
-const element = {
-  type: 'h1',
-  props: {
-    title: 'foo',
-    children: 'Heasdfsafllo',
-  },
-}
-const container = document.getElementById('root')
-
-const node = document.createElement(element.type)
-node['title'] = element.props.title
-
-const text = document.createTextNode('')
-text['nodeValue'] = element.props.children
-
-node.appendChild(text)
-container.appendChild(node)
-
-const element2 = (
+const element = (
   <div id="foo">
     <a href="">bar</a>
     <b></b>
@@ -30,7 +12,36 @@ function createElement(type, props, ...children) {
     type,
     props: {
       ...props,
-      children,
+      children: children.map((child) =>
+        typeof child === 'object' ? child : createTextElement(child),
+      ),
     },
   }
 }
+
+function createTextElement(text) {
+  return {
+    type: 'TEXT_ELEMENT',
+    props: {
+      nodeValue: text,
+      children: [],
+    },
+  }
+}
+
+function render(element, container) {
+  // TODO create dom nodes
+}
+
+const Ticker = {
+  createElement,
+}
+
+// const element = Ticker.createElement(
+// 'div',
+// { id: 'foot' },
+// Ticker.createElement('a', null, 'bar'),
+// Ticker.createElement('b'),
+// )
+const container = document.getElementById('root')
+Ticker.render(element.container)
