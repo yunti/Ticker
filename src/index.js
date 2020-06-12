@@ -1,12 +1,5 @@
 'use strict'
 
-const element = (
-  <div id="foo">
-    <a href="">bar</a>
-    <b></b>
-  </div>
-)
-
 function createElement(type, props, ...children) {
   return {
     type,
@@ -30,7 +23,20 @@ function createTextElement(text) {
 }
 
 function render(element, container) {
-  // TODO create dom nodes
+  const dom =
+    element.type == 'TEXT_ELEMENT'
+      ? document.createTextNode('')
+      : document.createElement(element.type)
+
+  const isProperty = (key) => key !== 'children'
+  Object.keys(element.props)
+    .filter(isProperty)
+    .forEach((name) => {
+      dom[name] = element.props[name]
+    })
+
+  element.props.children.forEach((child) => render(child, dom))
+  container.appendChild(dom)
 }
 
 const Ticker = {
@@ -44,5 +50,23 @@ const Ticker = {
 // Ticker.createElement('a', null, 'bar'),
 // Ticker.createElement('b'),
 // )
+
+const element = (
+  <div id="foo" style="background: salmon">
+    <h1>Hello World</h1>
+    <a href="">bar</a>
+    <b></b>
+  </div>
+)
+
 const container = document.getElementById('root')
-Ticker.render(element.container)
+// Ticker.render(element, container)
+const node = document.createElement({
+  type: 'h1',
+  props: {
+    children: 'Hello',
+  },
+})
+
+const text = document.createTextNode('')
+text['nodeValue'] = element.props.children
