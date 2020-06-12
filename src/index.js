@@ -35,6 +35,7 @@ function render(element, container) {
 
 const Ticker = {
   createElement,
+  render,
 }
 
 // const element = Ticker.createElement(
