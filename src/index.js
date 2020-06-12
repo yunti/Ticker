@@ -4,7 +4,7 @@ const element = {
   type: 'h1',
   props: {
     title: 'foo',
-    children: 'Hello',
+    children: 'Heasdfsafllo',
   },
 }
 const container = document.getElementById('root')
@@ -17,3 +17,20 @@ text['nodeValue'] = element.props.children
 
 node.appendChild(text)
 container.appendChild(node)
+
+const element2 = (
+  <div id="foo">
+    <a href="">bar</a>
+    <b></b>
+  </div>
+)
+
+function createElement(type, props, ...children) {
+  return {
+    type,
+    props: {
+      ...props,
+      children,
+    },
+  }
+}
