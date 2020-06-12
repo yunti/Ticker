@@ -1,6 +1,5 @@
-"use strict";
+'use strict'
 
-function start() {
-  const test = 5;
-  return test;
-}
+const element = <h1 titl="foo">Hello</h1>
+const container = document.getElementById('root')
+ReactDOM.render(element, container)
