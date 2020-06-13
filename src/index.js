@@ -44,24 +44,16 @@ const Ticker = {
   render,
 }
 /** @jsx Ticker.createElement */
-const element = <h1 title="foo">Hello World</h1>
+// const element = <h1 title="foo">Hello World</h1>
 
 /** @jsx Ticker.createElement */
-// const element = (
-//   <div id="foo" style="background: salmon">
-//     <h1>Hello World</h1>
-//     <a href="">bar</a>
-//     <b></b>
-//   </div>
-// )
+const element = (
+  <div id="foo" style="background: salmon">
+    <h1>Hello World</h1>
+    <a href="">bar</a>
+    <b></b>
+  </div>
+)
 const container = document.getElementById('root')
 
-// const node = document.createElement(element.type)
-// node['title'] = element.props.title
-
-// const text = document.createTextNode('')
-// text['nodeValue'] = element.props.children[0].props.nodeValue
-
-// node.appendChild(text)
-// container.appendChild(node)
 Ticker.render(element, container)
