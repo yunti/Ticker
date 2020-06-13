@@ -5,10 +5,10 @@ function createElement(type, props, ...children) {
     type,
     props: {
       ...props,
-      // children: children.map((child) =>
-      //   typeof child === 'object' ? child : createTextElement(child),
-      // ),
-      children: createTextElement(children[0]),
+      children: children.map((child) =>
+        typeof child === 'object' ? child : createTextElement(child),
+      ),
+      // children: createTextElement(children[0]),
     },
   }
 }
@@ -77,13 +77,12 @@ const container = document.getElementById('root')
 //     children: 'Hello World',
 //   },
 // }
-console.log(element.props.children)
 
 const node = document.createElement(element.type)
 node['title'] = element.props.title
 
 const text = document.createTextNode('')
-text['nodeValue'] = element.props.children.props.nodeValue
+text['nodeValue'] = element.props.children[0].props.nodeValue
 
 node.appendChild(text)
 container.appendChild(node)
