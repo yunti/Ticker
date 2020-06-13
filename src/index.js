@@ -46,14 +46,6 @@ const Ticker = {
 /** @jsx Ticker.createElement */
 const element = <h1 title="foo">Hello World</h1>
 
-// const element = Ticker.createElement(
-//   'h1',
-//   {
-//     title: 'foo',
-//   },
-// 'Hello World',
-// )
-
 /** @jsx Ticker.createElement */
 // const element = (
 //   <div id="foo" style="background: salmon">
@@ -68,14 +60,6 @@ const container = document.getElementById('root')
 // const node = document.createElement('h1')
 // const text = document.createTextNode('')
 // text['nodeValue'] = 'Hello'
-
-// const element = {
-//   type: 'h1',
-//   props: {
-//     title: 'foo',
-//     children: 'Hello World',
-//   },
-// }
 
 const node = document.createElement(element.type)
 node['title'] = element.props.title
