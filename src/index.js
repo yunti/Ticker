@@ -22,26 +22,26 @@ function createTextElement(text) {
   }
 }
 
-// function render(element, container) {
-//   const dom =
-//     element.type == 'TEXT_ELEMENT'
-//       ? document.createTextNode('')
-//       : document.createElement(element.type)
+function render(element, container) {
+  const dom =
+    element.type == 'TEXT_ELEMENT'
+      ? document.createTextNode('')
+      : document.createElement(element.type)
 
-//   const isProperty = (key) => key !== 'children'
-//   Object.keys(element.props)
-//     .filter(isProperty)
-//     .forEach((name) => {
-//       dom[name] = element.props[name]
-//     })
+  const isProperty = (key) => key !== 'children'
+  Object.keys(element.props)
+    .filter(isProperty)
+    .forEach((name) => {
+      dom[name] = element.props[name]
+    })
 
-//   element.props.children.forEach((child) => render(child, dom))
-//   container.appendChild(dom)
-// }
+  element.props.children.forEach((child) => render(child, dom))
+  container.appendChild(dom)
+}
 
 const Ticker = {
   createElement,
-  // render,
+  render,
 }
 /** @jsx Ticker.createElement */
 const element = <h1 title="foo">Hello World</h1>
@@ -54,19 +54,14 @@ const element = <h1 title="foo">Hello World</h1>
 //     <b></b>
 //   </div>
 // )
-console.log(element)
 const container = document.getElementById('root')
 
-// const node = document.createElement('h1')
+// const node = document.createElement(element.type)
+// node['title'] = element.props.title
+
 // const text = document.createTextNode('')
-// text['nodeValue'] = 'Hello'
+// text['nodeValue'] = element.props.children[0].props.nodeValue
 
-const node = document.createElement(element.type)
-node['title'] = element.props.title
-
-const text = document.createTextNode('')
-text['nodeValue'] = element.props.children[0].props.nodeValue
-
-node.appendChild(text)
-container.appendChild(node)
-// Ticker.render(element, container)
+// node.appendChild(text)
+// container.appendChild(node)
+Ticker.render(element, container)
