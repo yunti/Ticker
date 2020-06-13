@@ -8,7 +8,6 @@ function createElement(type, props, ...children) {
       children: children.map((child) =>
         typeof child === 'object' ? child : createTextElement(child),
       ),
-      // children: createTextElement(children[0]),
     },
   }
 }
@@ -45,15 +44,15 @@ const Ticker = {
   // render,
 }
 /** @jsx Ticker.createElement */
-// const element = <h1 title="foo">Hello World</h1>
+const element = <h1 title="foo">Hello World</h1>
 
-const element = Ticker.createElement(
-  'h1',
-  {
-    title: 'foo',
-  },
-  'Hello World',
-)
+// const element = Ticker.createElement(
+//   'h1',
+//   {
+//     title: 'foo',
+//   },
+// 'Hello World',
+// )
 
 /** @jsx Ticker.createElement */
 // const element = (
