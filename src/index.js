@@ -6,10 +6,9 @@ function createElement(type, props, ...children) {
     props: {
       ...props,
       // children: children.map((child) =>
-      // typeof child === 'object' ? child : createTextElement(child),
+      //   typeof child === 'object' ? child : createTextElement(child),
       // ),
-      // children: createTextElement(children),
-      children: children[0],
+      children: createTextElement(children[0]),
     },
   }
 }
@@ -78,12 +77,13 @@ const container = document.getElementById('root')
 //     children: 'Hello World',
 //   },
 // }
+console.log(element.props.children)
 
 const node = document.createElement(element.type)
 node['title'] = element.props.title
 
 const text = document.createTextNode('')
-text['nodeValue'] = element.props.children
+text['nodeValue'] = element.props.children.props.nodeValue
 
 node.appendChild(text)
 container.appendChild(node)
