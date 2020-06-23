@@ -29,6 +29,15 @@ function render(element, container) {
       ? document.createTextNode('')
       : document.createElement(element.type)
 
+  // Add Event Listeners
+  const isEvent = (key) => key.startsWith('on')
+  Object.keys(element.props)
+    .filter(isEvent)
+    .forEach((name) => {
+      const eventType = name.toLowerCase().substring(2)
+      dom.addEventListener(eventType, props[name])
+    })
+
   // Set properties on DOM Element
   const isProperty = (key) => key !== 'children'
   Object.keys(element.props)
