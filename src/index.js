@@ -23,11 +23,13 @@ function createTextElement(text) {
 }
 
 function render(element, container) {
+  // Create DOM Element
   const dom =
     element.type == 'TEXT_ELEMENT'
       ? document.createTextNode('')
       : document.createElement(element.type)
 
+  // Set properties on DOM Element
   const isProperty = (key) => key !== 'children'
   Object.keys(element.props)
     .filter(isProperty)
@@ -43,8 +45,6 @@ const Ticker = {
   createElement,
   render,
 }
-/** @jsx Ticker.createElement */
-// const element = <h1 title="foo">Hello World</h1>
 
 /** @jsx Ticker.createElement */
 const element = (
@@ -55,5 +55,4 @@ const element = (
   </div>
 )
 const container = document.getElementById('root')
-
 Ticker.render(element, container)
