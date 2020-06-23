@@ -58,8 +58,8 @@ const Ticker = {
 /** @jsx Ticker.createElement */
 const element = (
   <div id="foo" style="background: salmon">
-    <h1>Hello World</h1>
-    <a href="">bar</a>
+    <h1 name="Bob">{`Hello ${name}`}</h1>
+    <button style="background: green">Click</button>
     <b></b>
   </div>
 )
