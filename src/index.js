@@ -35,7 +35,7 @@ function render(element, container) {
     .filter(isEvent)
     .forEach((name) => {
       const eventType = name.toLowerCase().substring(2)
-      dom.addEventListener(eventType, props[name])
+      dom.addEventListener(eventType, element.props[name])
     })
 
   // Set properties on DOM Element
@@ -59,9 +59,12 @@ const Ticker = {
 const element = (
   <div id="foo" style="background: salmon">
     <h1 name="Bob">{`Hello ${name}`}</h1>
-    <button style="background: green">Click</button>
+    <button style="background: green" onClick={() => console.log('Clicked')}>
+      Press
+    </button>
     <b></b>
   </div>
 )
+
 const container = document.getElementById('root')
 Ticker.render(element, container)
