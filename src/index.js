@@ -22,10 +22,10 @@ function createTextElement(text) {
   }
 }
 
-function render(element, container) {
+function render(element, parentDom) {
   // Create DOM Element
   const dom =
-    element.type == 'TEXT_ELEMENT'
+    element.type === 'TEXT_ELEMENT'
       ? document.createTextNode('')
       : document.createElement(element.type)
 
@@ -45,9 +45,13 @@ function render(element, container) {
     .forEach((name) => {
       dom[name] = element.props[name]
     })
-
+  console.log(element)
   element.props.children.forEach((child) => render(child, dom))
-  container.appendChild(dom)
+  if (!parentDom.lastChild) {
+    parentDom.appendChild(dom)
+  } else {
+    parentDom.replaceChild(dom, parentDom.lastChild)
+  }
 }
 
 const Ticker = {
