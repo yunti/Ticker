@@ -49,11 +49,11 @@ function render(element, parentDom) {
 
   element.props.children.forEach((child) => render(child, dom))
 
-  // if (!parentDom.lastChild) {
-  parentDom.appendChild(dom)
-  // } else {
-  // parentDom.replaceChild(dom, parentDom.lastChild)
-  // }
+  if (!parentDom.lastChild) {
+    parentDom.appendChild(dom)
+  } else {
+    parentDom.replaceChild(dom, parentDom.lastChild)
+  }
 }
 
 const Ticker = {
