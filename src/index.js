@@ -22,7 +22,27 @@ function createTextElement(text) {
   }
 }
 
-function render(element, parentDom) {
+let rootInstance = null
+
+function render(element, container) {
+  const prevInstance = rootInstance
+  const nextInstance = reconcile(container, prevInstance, element)
+  rootInstance = nextInstance
+}
+
+function reconcile(parentDom, instance, element) {
+  if (instance == null) {
+    const newInstance = instantiate(element)
+    parentDom.appendChild(newInstance.dom)
+    return newInstance
+  } else {
+    const newInstance = instantiate(element)
+    parentDom.replaceChild(newInstance.dom, instance.dom)
+    return newInstance
+  }
+}
+
+function instantiate(element, parentDom) {
   // Create DOM Element
   const dom =
     element.type === 'TEXT_ELEMENT'
@@ -45,17 +65,14 @@ function render(element, parentDom) {
     .forEach((name) => {
       dom[name] = element.props[name]
     })
-  console.log(element)
 
-  element.props.children.forEach((child) => render(child, dom))
+  const childElements = element.props.children || []
+  const childInstances = childElements.map(instantiate)
+  const childDoms = childInstances.map((childInstance) => childInstance.dom)
+  childDoms.forEach((childDom) => dom.appendChild(childDom))
 
-  // This will appendchild for the first render of the clock and update it for subsequent renders
-  // However for general case it will just overwrite where it shouldn't
-  if (!parentDom.lastChild) {
-    parentDom.appendChild(dom)
-  } else {
-    parentDom.replaceChild(dom, parentDom.lastChild)
-  }
+  const instance = { dom, element, childInstances }
+  return instance
 }
 
 const Ticker = {
