@@ -49,23 +49,9 @@ function instantiate(element, parentDom) {
       ? document.createTextNode('')
       : document.createElement(element.type)
 
-  // Add Event Listeners
-  const isEvent = (key) => key.startsWith('on')
-  Object.keys(element.props)
-    .filter(isEvent)
-    .forEach((name) => {
-      const eventType = name.toLowerCase().substring(2)
-      dom.addEventListener(eventType, element.props[name])
-    })
+  updateDomProperties(dom, [], element.props)
 
-  // Set properties on DOM Element
-  const isProperty = (key) => key !== 'children'
-  Object.keys(element.props)
-    .filter(isProperty)
-    .forEach((name) => {
-      dom[name] = element.props[name]
-    })
-
+  // Instantiate and append children
   const childElements = element.props.children || []
   const childInstances = childElements.map(instantiate)
   const childDoms = childInstances.map((childInstance) => childInstance.dom)
@@ -73,6 +59,43 @@ function instantiate(element, parentDom) {
 
   const instance = { dom, element, childInstances }
   return instance
+}
+
+function updateDomProperties(dom, prevProps, nextProps) {
+  // blindly remove all events and props and add the new ones
+
+  const isEvent = (key) => key.startsWith('on')
+  const isProperty = (key) => !isEvent(key) && key !== 'children'
+
+  // Remove event listners
+  Object.keys(prevProps)
+    .filter(isEvent)
+    .forEach((key) => {
+      const eventType = key.toLowerCase().substring(2)
+      dom.removeEventListener(eventType, prevProps(key))
+    })
+
+  //Remove properties
+  Object.keys(prevProps)
+    .filter(isEvent)
+    .forEach((key) => {
+      dom[key] = null
+    })
+
+  // Set properties on DOM Element
+  Object.keys(nextProps)
+    .filter(isProperty)
+    .forEach((key) => {
+      dom[key] = nextProps[key]
+    })
+
+  // Add Event Listeners
+  Object.keys(nextProps)
+    .filter(isEvent)
+    .forEach((key) => {
+      const eventType = key.toLowerCase().substring(2)
+      dom.addEventListener(eventType, nextProps[key])
+    })
 }
 
 const Ticker = {
