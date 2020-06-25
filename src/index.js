@@ -46,12 +46,14 @@ function render(element, parentDom) {
       dom[name] = element.props[name]
     })
   console.log(element)
+
   element.props.children.forEach((child) => render(child, dom))
-  if (!parentDom.lastChild) {
-    parentDom.appendChild(dom)
-  } else {
-    parentDom.replaceChild(dom, parentDom.lastChild)
-  }
+
+  // if (!parentDom.lastChild) {
+  parentDom.appendChild(dom)
+  // } else {
+  // parentDom.replaceChild(dom, parentDom.lastChild)
+  // }
 }
 
 const Ticker = {
@@ -59,16 +61,25 @@ const Ticker = {
   render,
 }
 
-/** @jsx Ticker.createElement */
-const element = (
-  <div id="foo" style="background: salmon">
-    <h1 name="Bob">{`Hello ${name}`}</h1>
-    <button style="background: green" onClick={() => console.log('Clicked')}>
-      Press
-    </button>
-    <b></b>
-  </div>
-)
+// /** @jsx Ticker.createElement */
+// const element = (
+//   <div id="foo" style="background: salmon">
+//     <h1 name="Bob">{`Hello ${name}`}</h1>
+//     <button style="background: green" onClick={() => console.log('Clicked')}>
+//       Press
+//     </button>
+//     <b></b>
+//   </div>
+// )
 
 const container = document.getElementById('root')
+
+function tick() {
+  const time = new Date().toLocaleTimeString()
+  const clockElement = <h1>{time}</h1>
+  render(clockElement, container)
+}
+
+tick()
+setInterval(tick, 1000)
 Ticker.render(element, container)
