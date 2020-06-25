@@ -49,6 +49,8 @@ function render(element, parentDom) {
 
   element.props.children.forEach((child) => render(child, dom))
 
+  // This will appendchild for the first render of the clock and update it for subsequent renders
+  // However for general case it will just overwrite where it shouldn't
   if (!parentDom.lastChild) {
     parentDom.appendChild(dom)
   } else {
