@@ -40,17 +40,27 @@ function reconcile(parentDom, instance, element) {
     // Remove instance
     parentDom.removeChild(instance.dom)
     return null
-  } else if (instance.element.type === element.type) {
+  } else if (instance.element.type !== element.type) {
+    // Replace instance
+    const newInstance = instantiate(element)
+    parentDom.replaceChild(newInstance.dom, instance.dom)
+    return newInstance
+  } else if (typeof element.type === 'string') {
     // Update instance
     updateDomProperties(instance.dom, instance.element.props, element.props)
     instance.childInstances = reconcileChildren(instance, element)
     instance.element = element
     return instance
   } else {
-    // Replace instance
-    const newInstance = instantiate(element)
-    parentDom.replaceChild(newInstance.dom, instance.dom)
-    return newInstance
+    // Update composite instance
+    instance.publicInstance.props = element.props
+    const childElement = instance.publicInstance.render()
+    const oldChildInstance = instance.childInstance
+    const childInstance = reconcile(parentDom, oldChildInstance, childElement)
+    instance.dom = childInstance.dom
+    instance.childInstance = childInstance
+    instance.element = element
+    return instance
   }
 }
 
@@ -70,22 +80,36 @@ function reconcileChildren(instance, element) {
 }
 
 function instantiate(element, parentDom) {
-  // Create DOM Element
-  const dom =
-    element.type === 'TEXT_ELEMENT'
-      ? document.createTextNode('')
-      : document.createElement(element.type)
+  const isDomElement = typeof element.type === 'string'
 
-  updateDomProperties(dom, [], element.props)
+  if (isDomElement) {
+    // Create DOM Element
+    const dom =
+      element.type === 'TEXT_ELEMENT'
+        ? document.createTextNode('')
+        : document.createElement(element.type)
 
-  // Instantiate and append children
-  const childElements = element.props.children || []
-  const childInstances = childElements.map(instantiate)
-  const childDoms = childInstances.map((childInstance) => childInstance.dom)
-  childDoms.forEach((childDom) => dom.appendChild(childDom))
+    updateDomProperties(dom, [], element.props)
 
-  const instance = { dom, element, childInstances }
-  return instance
+    // Instantiate and append children
+    const childElements = element.props.children || []
+    const childInstances = childElements.map(instantiate)
+    const childDoms = childInstances.map((childInstance) => childInstance.dom)
+    childDoms.forEach((childDom) => dom.appendChild(childDom))
+
+    const instance = { dom, element, childInstances }
+    return instance
+  } else {
+    // Instantiate component element
+    const instance = {}
+    const publicInstance = createPublicInstance(element, instance)
+    const childElement = publicInstance.render()
+    const childInstance = instantiate(childElement)
+    const dom = childInstance.dom
+
+    Object.assign(instance, { dom, element, childInstance, publicInstance })
+    return instance
+  }
 }
 
 function updateDomProperties(dom, prevProps, nextProps) {
@@ -125,30 +149,55 @@ function updateDomProperties(dom, prevProps, nextProps) {
     })
 }
 
+class Component {
+  constructor(props) {
+    this.props = props
+    this.state = this.state || {}
+  }
+
+  setState(partialState) {
+    this.state = Object.assign({}, this.state, partialState)
+    updateInstance(this.__internalInstance)
+  }
+}
+
+function createPublicInstance(element, internalInstance) {
+  const { type, props } = element
+  const publicInstance = new type(props)
+  publicInstance.__internalInstance = internalInstance
+  return publicInstance
+}
+
+function updateInstance(internalInstance) {
+  const parentDom = internalInstance.dom.parentNode
+  const element = internalInstance.element
+  reconcile(parentDom, internalInstance, element)
+}
+
 const Ticker = {
   createElement,
   render,
 }
 
-// /** @jsx Ticker.createElement */
-// const element = (
-//   <div id="foo" style="background: salmon">
-//     <h1 name="Bob">{`Hello ${name}`}</h1>
-//     <button style="background: green" onClick={() => console.log('Clicked')}>
-//       Press
-//     </button>
-//     <b></b>
-//   </div>
-// )
+/** @jsx Ticker.createElement */
+const element = (
+  <div id="foo" style="background: salmon">
+    <h1 name="Bob">{`Hello ${name}`}</h1>
+    <button style="background: green" onClick={() => console.log('Clicked')}>
+      Press
+    </button>
+    <b></b>
+  </div>
+)
 
 const container = document.getElementById('root')
 
-function tick() {
-  const time = new Date().toLocaleTimeString()
-  const clockElement = <h1>{time}</h1>
-  render(clockElement, container)
-}
+// function tick() {
+//   const time = new Date().toLocaleTimeString()
+//   const clockElement = <h1>{time}</h1>
+//   render(clockElement, container)
+// }
 
-tick()
-setInterval(tick, 1000)
-// Ticker.render(element, container)
+// tick()
+// setInterval(tick, 1000)
+Ticker.render(element, container)
