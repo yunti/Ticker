@@ -16,7 +16,7 @@ class App extends Ticker.Component {
       <div>
         <h1>Ticker Stories</h1>
         <ul>
-          {this.props.stories.map((story) => {
+          {this.props.stories.map(story => {
             return <Story name={story.name} url={story.url} />
           })}
         </ul>
@@ -41,7 +41,7 @@ class Story extends Ticker.Component {
     const likesElement = <span />
     return (
       <li>
-        <button onClick={(e) => this.like()}>
+        <button onClick={e => this.like()}>
           {likes}
           <b>heart</b>
         </button>

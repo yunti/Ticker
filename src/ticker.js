@@ -8,8 +8,8 @@ function createElement(type, config, ...args) {
   const hasChildren = args.length > 0
   const rawChildren = hasChildren ? [].concat(...args) : []
   props.children = rawChildren
-    .filter((c) => c != null && c !== false)
-    .map((c) => (c instanceof Object ? c : createTextElement(c)))
+    .filter(c => c != null && c !== false)
+    .map(c => (c instanceof Object ? c : createTextElement(c)))
   return { type, props }
 }
 
@@ -69,7 +69,7 @@ function reconcileChildren(instance, element) {
     const newChildInstance = reconcile(dom, childInstance, childElement)
     newChildInstance.push(newChildInstance)
   }
-  return newChildInstances.filter((instance) => instance != null)
+  return newChildInstances.filter(instance => instance != null)
 }
 
 function instantiate(element, parentDom) {
@@ -87,8 +87,8 @@ function instantiate(element, parentDom) {
     // Instantiate and append children
     const childElements = element.props.children || []
     const childInstances = childElements.map(instantiate)
-    const childDoms = childInstances.map((childInstance) => childInstance.dom)
-    childDoms.forEach((childDom) => dom.appendChild(childDom))
+    const childDoms = childInstances.map(childInstance => childInstance.dom)
+    childDoms.forEach(childDom => dom.appendChild(childDom))
 
     const instance = { dom, element, childInstances }
     return instance
@@ -108,13 +108,13 @@ function instantiate(element, parentDom) {
 function updateDomProperties(dom, prevProps, nextProps) {
   // blindly remove all events and props and add the new ones
 
-  const isEvent = (key) => key.startsWith('on')
-  const isProperty = (key) => !isEvent(key) && key !== 'children'
+  const isEvent = key => key.startsWith('on')
+  const isProperty = key => !isEvent(key) && key !== 'children'
 
   // Remove event listeners
   Object.keys(prevProps)
     .filter(isEvent)
-    .forEach((key) => {
+    .forEach(key => {
       const eventType = key.toLowerCase().substring(2)
       dom.removeEventListener(eventType, prevProps(key))
     })
@@ -122,21 +122,21 @@ function updateDomProperties(dom, prevProps, nextProps) {
   //Remove properties
   Object.keys(prevProps)
     .filter(isEvent)
-    .forEach((key) => {
+    .forEach(key => {
       dom[key] = null
     })
 
   // Set properties on DOM Element
   Object.keys(nextProps)
     .filter(isProperty)
-    .forEach((key) => {
+    .forEach(key => {
       dom[key] = nextProps[key]
     })
 
   // Add Event Listeners
   Object.keys(nextProps)
     .filter(isEvent)
-    .forEach((key) => {
+    .forEach(key => {
       const eventType = key.toLowerCase().substring(2)
       dom.addEventListener(eventType, nextProps[key])
     })
