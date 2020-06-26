@@ -1,28 +1,21 @@
 'use strict'
 
-function createElement(type, props, ...children) {
-  return {
-    type,
-    props: {
-      ...props,
-      children: children.map((child) =>
-        typeof child === 'object' ? child : createTextElement(child),
-      ),
-    },
-  }
-}
-
-function createTextElement(text) {
-  return {
-    type: 'TEXT_ELEMENT',
-    props: {
-      nodeValue: text,
-      children: [],
-    },
-  }
-}
-
 let rootInstance = null
+const TEXT_ELEMENT = 'TEXT_ELEMENT'
+
+function createElement(type, config, ...args) {
+  const props = Object.assign({}, config)
+  const hasChildren = args.length > 0
+  const rawChildren = hasChildren ? [].concat(...args) : []
+  props.children = rawChildren
+    .filter((c) => c != null && c !== false)
+    .map((c) => (c instanceof Object ? c : createTextElement(c)))
+  return { type, props }
+}
+
+function createTextElement(value) {
+  return createElement(TEXT_ELEMENT, { nodeValue: value })
+}
 
 function render(element, container) {
   const prevInstance = rootInstance
@@ -177,6 +170,7 @@ function updateInstance(internalInstance) {
 const Ticker = {
   createElement,
   render,
+  Component,
 }
 
 /** @jsx Ticker.createElement */
