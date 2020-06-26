@@ -13,6 +13,7 @@
     "@babel/core": "^7.10.2",
     "@babel/preset-react": "^7.10.1",
     "parcel-bundler": "^1.12.4",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "ticker": "^0.1.0"
   }
 }
