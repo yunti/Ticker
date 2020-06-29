@@ -54,26 +54,6 @@ class Story extends Ticker.Component {
   }
 }
 
-// /** @jsx Ticker.createElement */
-// const element = (
-//   <div id="foo" style="background: salmon">
-//     <h1 name="Bob">{`Hello ${name}`}</h1>
-//     <button style="background: green" onClick={() => console.log('Clicked')}>
-//       Press
-//     </button>
-//     <b></b>
-//   </div>
-// )
-
 const container = document.getElementById('root')
 
-// function tick() {
-//   const time = new Date().toLocaleTimeString()
-//   const clockElement = <h1>{time}</h1>
-//   render(clockElement, container)
-// }
-
-// tick()
-// setInterval(tick, 1000)
-// Ticker.render(element, container)
 Ticker.render(<App stories={stories} />, container)
