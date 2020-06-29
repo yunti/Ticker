@@ -67,12 +67,12 @@ function reconcileChildren(instance, element) {
     const childInstance = childInstances[i]
     const childElement = nextChildElements[i]
     const newChildInstance = reconcile(dom, childInstance, childElement)
-    newChildInstance.push(newChildInstance)
+    newChildInstances.push(newChildInstance)
   }
   return newChildInstances.filter(instance => instance != null)
 }
 
-function instantiate(element, parentDom) {
+function instantiate(element) {
   const isDomElement = typeof element.type === 'string'
 
   if (isDomElement) {
@@ -116,7 +116,7 @@ function updateDomProperties(dom, prevProps, nextProps) {
     .filter(isEvent)
     .forEach(key => {
       const eventType = key.toLowerCase().substring(2)
-      dom.removeEventListener(eventType, prevProps(key))
+      dom.removeEventListener(eventType, prevProps[key])
     })
 
   //Remove properties
@@ -142,6 +142,13 @@ function updateDomProperties(dom, prevProps, nextProps) {
     })
 }
 
+function createPublicInstance(element, internalInstance) {
+  const { type, props } = element
+  const publicInstance = new type(props)
+  publicInstance.__internalInstance = internalInstance
+  return publicInstance
+}
+
 class Component {
   constructor(props) {
     this.props = props
@@ -152,13 +159,6 @@ class Component {
     this.state = Object.assign({}, this.state, partialState)
     updateInstance(this.__internalInstance)
   }
-}
-
-function createPublicInstance(element, internalInstance) {
-  const { type, props } = element
-  const publicInstance = new type(props)
-  publicInstance.__internalInstance = internalInstance
-  return publicInstance
 }
 
 function updateInstance(internalInstance) {
