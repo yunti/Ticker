@@ -55,5 +55,5 @@ class Story extends Ticker.Component {
 }
 
 const container = document.getElementById('root')
-
+/** @jsx Ticker.createElement */
 Ticker.render(<App stories={stories} />, container)
