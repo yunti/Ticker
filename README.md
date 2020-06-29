@@ -1,4 +1,4 @@
-<p align="center"><img src="./src/clock.jpg"></p>
+![Screenshot](clock.png)
 
 # Ticker
 
