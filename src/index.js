@@ -3,18 +3,21 @@
 import Ticker from './ticker'
 
 const stories = [
-  { name: 'Didact introduction', url: 'http://bit.ly/2pX7HNn' },
-  { name: 'Rendering DOM elements ', url: 'http://bit.ly/2qCOejH' },
-  { name: 'Element creation and JSX', url: 'http://bit.ly/2qGbw8S' },
-  { name: 'Instances and reconciliation', url: 'http://bit.ly/2q4A746' },
-  { name: 'Components and state', url: 'http://bit.ly/2rE16nh' },
+  {
+    name: 'Novak Djokovic',
+    url: 'https://en.wikipedia.org/wiki/Novak_Djokovic',
+  },
+  { name: 'Rafael Nadal', url: 'https://en.wikipedia.org/wiki/Rafael_Nadal' },
+  { name: 'Bjorn Borg', url: 'https://en.wikipedia.org/wiki/Björn_Borg' },
+  { name: 'Pete Sampras', url: 'https://en.wikipedia.org/wiki/Pete_Sampras' },
+  { name: 'Ivan Lendl', url: 'https://en.wikipedia.org/wiki/Ivan_Lendl' },
 ]
 
 class App extends Ticker.Component {
   render() {
     return (
       <div>
-        <h1>Ticker Stories</h1>
+        <h1>Vote for the best tennis play ever</h1>
         <ul>
           {this.props.stories.map(story => {
             return <Story name={story.name} url={story.url} />
@@ -43,7 +46,7 @@ class Story extends Ticker.Component {
       <li>
         <button onClick={e => this.like()}>
           {likes}
-          <b>heart</b>
+          <b>👍</b>
         </button>
         <a href={url}>{name}</a>
       </li>
